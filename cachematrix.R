@@ -5,15 +5,21 @@
 #Gets the inverse matrix
 
 makeCacheMatrix <- function(x = matrix()) {
-  myinmatrix <- matrix(x[NULL], nrow(x),ncol(x))
-  setmatrix <-function (y=matrix()){
-    x<<-y
-    myinmatrix <- matrix(x[NULL], nrow(x),ncol(x))
+  
+  myinvmatrix <- matrix(data = NA, nrow(x),ncol(x))
+ 
+  setmatrix <- function (y=matrix()){
+    x <<- y
+    myinvmatrix <- matrix(data = NA, nrow(x),ncol(x))
   }
-  getmatrix <- function()x
-  setmatrixinv <- function(solve) myinmatrix <<- solve(x)
-  getmatrixinv <- function() myinmatrix
-  list(setmatrix=setmatrix, getmatrix = getmatrix, setmatrixinv = setmatrixinv, getmatrixinv=getmatrixinv)
+  
+  getmatrix <- function() x
+  
+  setmatrixinv <- function(invmatrix) myinvmatrix <<- invmatrix
+  
+  getmatrixinv <- function() myinvmatrix
+ 
+  list(setmatrix = setmatrix, getmatrix = getmatrix, setmatrixinv = setmatrixinv, getmatrixinv=getmatrixinv)
 }
 
 
@@ -22,16 +28,19 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
   ## Return a matrix that is the inverse of 'x'
   
-  myinmatrix<-x$getmatrixinv()
+  myinvmatrix <- x$getmatrixinv()
   #print(myinmatrix)
-  if(!all(is.na(myinmatrix))){
+  
+  if(!all(is.na(myinvmatrix))){
     message("Getting matrix inv from cache")
-    return(myinmatrix)
+    return(myinvmatrix)
   }
-  mydata <-x$getmatrix()
+  
+  mymatrix <- x$getmatrix()
   #print(mydata)
-  myinmatrix <- solve(mydata, ...)
-  x$setmatrixinv(myinmatrix)
+  myinvmatrix <- solve(mymatrix, ...)
+  x$setmatrixinv(myinvmatrix)
   #print(myinmatrix)
-  myinmatrix
+  myinvmatrix
+
 }
